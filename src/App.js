@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css';
 import axios from 'axios';
 import DisplayEmployee from './components/DisplayEmployee';
+import LoadingSpinner from './components/LoadingSpinner';
 
 const sampleEmployee = {
   gender: 'male',
@@ -27,30 +28,34 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      employee: sampleEmployee
+      employee: sampleEmployee,
+      loading: false
     }
     this.getEmployee = this.getEmployee.bind(this);
   }
 
   getEmployee() {
+    this.setState({ loading: true }, () => {
     // Send the request  
     axios.get('https://randomuser.me/api?nat=en')  
       // Extract the DATA from the received response  
       .then(response => response.data)  
       // Use this data to update the state  
       .then(data => {  
-        console.log(data);
-        this.setState({  
-          employee: data.results[0],  
+        this.setState({ 
+          loading: false, 
+          employee: data.results[0]  
         });  
     });  
   }
+    )};
 
   render() {
+    const { employee, loading } = this.state;
     return (
       <div className="App">
-        <DisplayEmployee employee={this.state.employee}/>
-        <button type="button" onClick={this.getEmployee}>Get employee</button>
+        {loading ? <LoadingSpinner /> : <DisplayEmployee employee={employee}/>}
+        <button type="button" onClick={this.getEmployee}>Get employee</button>        
       </div>
     )
   }
