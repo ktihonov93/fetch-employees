@@ -59,8 +59,7 @@ class App extends Component {
     const { employee, loading } = this.state;
     return (
       <div className="App">
-        {employee? (<DisplayEmployee employee={employee}/>) : (<LoadingSpinner />)}
-        {loading ? <LoadingSpinner /> : <DisplayEmployee employee={employee}/>}
+        {loading || !employee ? <LoadingSpinner /> : <DisplayEmployee employee={employee}/>}
         <button type="button" onClick={this.getEmployee}>Get employee</button>        
       </div>
     )
